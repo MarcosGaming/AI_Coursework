@@ -1,0 +1,19 @@
+import java.io.File;
+
+public class Main 
+{ 
+
+	public static void main(String[] args) 
+	{
+		File file = new File(args[0]);
+		// Check that the argument passed is not empty and its a file
+		if(args[0].isEmpty() || !file.exists())
+		{
+			System.out.println("No file has been passed or the file does not exist");
+			System.exit(0);;
+		}
+		// Store the contents of the file into a string
+
+	}
+
+}
