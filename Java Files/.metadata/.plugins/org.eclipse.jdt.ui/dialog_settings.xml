@@ -3,10 +3,11 @@
 	<section name="FatJarPackageWizard">
 		<item value="C:\Users\Marcos\Desktop\AI_Coursework" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
 		<item value="Main - Search" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
-		<item value="C:\Users\Marcos\Desktop\Search.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
+		<item value="C:\Users\Marcos\Desktop\AI_Coursework\Caverns files\Search.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
 		<item value="2" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
+			<item value="C:\Users\Marcos\Desktop\AI_Coursework\Caverns files\Search.jar"/>
 			<item value="C:\Users\Marcos\Desktop\Search.jar"/>
 		</list>
 		<list key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION_HISTORY">
@@ -24,6 +25,8 @@
 	<section name="NewClassWizardPage">
 		<item value="false" key="create_constructor"/>
 		<item value="true" key="create_unimplemented"/>
+	</section>
+	<section name="RenameInformationPopup">
 	</section>
 	<section name="OptionalMessageDialog.hide.">
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>

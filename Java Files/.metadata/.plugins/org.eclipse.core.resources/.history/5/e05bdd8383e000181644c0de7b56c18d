@@ -1,0 +1,203 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+class Coordinate
+{
+	public int x;
+	public int y;
+}
+
+class Cave
+{
+	public int caveNumber;
+	public Coordinate coordinates;
+	public List<Cave> connections;
+}
+
+public class Main 
+{ 
+	// h(n) heuristics used is the eucledian distance between two points
+	public static int calculateDistance(Cave cave1, Cave cave2)
+	{
+		return (int) Math.sqrt(Math.pow(cave1.coordinates.x - cave2.coordinates.x,2) + Math.pow(cave1.coordinates.y - cave2.coordinates.y, 2));
+	}
+
+
+	public static void main(String[] args) throws IOException 
+	{
+		long startTime = System.nanoTime();
+		File file = null;
+		// Check that the an argument is passed and that the argument is a file
+		if(args.length == 0)
+		{
+			System.out.println("No file has been passed");
+			System.exit(0);
+		}
+		else
+		{
+			file = new File(args[0]);
+			if(!file.exists())
+			{
+				System.out.println("The file does not exist");
+				System.exit(0);
+			}
+		}
+		
+		// Read the file and create the caves
+		List<Cave> caves = new ArrayList<Cave>();
+		int numberOfCaves = 0;
+		// Booleans to check in which part of the file we are
+		boolean N = false;
+		boolean N2 = false;
+		// Counters to keep track of each cave 
+		int counter = 0;
+		int caveConnectionsCounter = 0;
+		FileReader fr = new FileReader(file.getName());
+		BufferedReader br = new BufferedReader(fr);
+		String line;
+		while ((line = br.readLine()) != null) 
+		{
+			String[] fileContent = line.split(",");
+			for(int i = 0; i < fileContent.length; i++)
+			{
+				// The first element in the file is the number of caves
+				if(!N)
+				{
+					N = true;
+					numberOfCaves = Integer.parseInt(fileContent[i]);
+					continue;
+				}
+				// The next number of caves * 2 elements correspond to the caves coordinates
+				if(N && !N2)
+				{
+					// Create a new cave and at to it the number and coordinates (two integers per cave)
+					Cave cave = new Cave();
+					cave.caveNumber = counter;
+					cave.coordinates = new Coordinate();
+					cave.coordinates.x = Integer.parseInt(fileContent[i]);
+					cave.coordinates.y = Integer.parseInt(fileContent[i+1]);
+					caves.add(cave);
+					// Increase the counter and the position
+					counter++;
+					i++;
+					// If the counter corresponds to number of caves then this section is finished
+					if(counter == numberOfCaves)
+					{
+						counter = 0;
+						N2 = true;
+					}
+					continue;
+				}
+				// The next number of caves * number of caves elements correspond to the caves connections
+				if(N && N2)
+				{
+					// Initialize the connections integer array only at the start of each cave connections
+					if(caveConnectionsCounter == 0)
+					{
+						caves.get(counter).connections = new ArrayList<Cave>();
+					}
+					// Set the connections (only add the caves that have a connection)
+					if(Integer.parseInt(fileContent[i]) == 1)
+					{
+						caves.get(counter).connections.add(caves.get(caveConnectionsCounter));
+					}
+					caveConnectionsCounter++;
+					// If the caveConnectionsCounter corresponds to number of caves then we increase the counter
+					if(caveConnectionsCounter == numberOfCaves)
+					{
+						counter++;
+						caveConnectionsCounter = 0;
+					}
+				}
+			}
+		}
+		fr.close();
+		br.close();
+		
+		// Elements of A*
+		List<Cave> openList = new ArrayList<Cave>();
+		List<Cave> closedList = new ArrayList<Cave>();
+		HashMap<Cave, Cave> parentMap = new HashMap<Cave, Cave>();
+		Cave currentCave = caves.get(0);
+		HashMap<Cave, Integer> fScoreMap = new HashMap<Cave, Integer>();
+		HashMap<Cave, Integer> gScoreMap = new HashMap<Cave, Integer>();
+		
+		// Path from start to goal node
+		StringBuilder pathToGoal = new StringBuilder();
+		
+		// Set the elements of the first node
+		openList.add(currentCave);
+		parentMap.put(currentCave, null);
+		fScoreMap.put(currentCave, calculateDistance(currentCave, caves.get(numberOfCaves-1)));
+		gScoreMap.put(currentCave, 0);
+		
+		for(int i = 0; i < caves.get(0).connections.size(); i++)
+		{
+			System.out.println(caves.get(0).connections.get(i));
+		}
+		
+		// A * implementation
+		while(!openList.isEmpty())
+		{
+			// Set the current cave to the one with the smallest fn in the frontier
+			currentCave = openList.get(0);
+			for(Cave cave : openList)
+			{
+				if(fScoreMap.get(cave) < fScoreMap.get(currentCave))
+				{
+					currentCave = cave;
+				}
+			}
+			// Check if the current cave is the last cave (goal reached)
+			if(currentCave.caveNumber == numberOfCaves-1)
+			{
+				// Get the path from the current cave to the first cave
+				while(true)
+				{ 
+					pathToGoal.insert(0, currentCave.caveNumber + 1 + " ");
+					currentCave = parentMap.get(currentCave);
+					if(currentCave == null)
+					{
+						System.out.println(pathToGoal);
+						long endTime = System.nanoTime();
+						System.out.println("Took "+(endTime - startTime)/1000000000 + " s");
+						return;
+					}
+				}
+			}
+			
+			openList.remove(currentCave);
+			closedList.add(currentCave);
+			
+			// Add the neighbours of the current cave to the open list
+			for(Cave neighbour : currentCave.connections)
+			{
+				// If the neighbour has already been explored go to the next
+				if(closedList.contains(neighbour))
+				{
+					continue;
+				}
+				int neighbourScore = gScoreMap.get(currentCave) + calculateDistance(currentCave, neighbour);
+				// If the neighbour is already in the frontier do not add it again
+				if(!openList.contains(neighbour))
+				{
+					openList.add(neighbour);
+				}
+				parentMap.put(neighbour, currentCave);
+				gScoreMap.put(neighbour, neighbourScore);
+				fScoreMap.put(neighbour, gScoreMap.get(neighbour) + calculateDistance(neighbour, caves.get(numberOfCaves-1)));
+			}
+		}
+		// Failure
+		long endTime = System.nanoTime();
+		System.out.println("Took "+(endTime - startTime)/1000000000 + " s");
+		System.out.println(0);
+		return;
+	}
+
+}
