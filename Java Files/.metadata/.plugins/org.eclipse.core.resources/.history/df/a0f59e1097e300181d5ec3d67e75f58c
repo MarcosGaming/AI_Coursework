@@ -137,7 +137,7 @@ public class Main
 		
 		// Path from start to goal node and length of the path
 		StringBuilder pathToGoal = new StringBuilder();
-		float length = 0.0f;
+		float distance = 0.0f;
 		
 		// Set the elements of the first node
 		openList.add(currentCave);
@@ -164,7 +164,7 @@ public class Main
 			// Check if the current cave is the last cave (goal reached)
 			if(currentCave.caveNumber == numberOfCaves-1)
 			{
-				length = fScoreMap.get(currentCave);
+				distance = fScoreMap.get(currentCave);
 				// Get the path from the current cave to the first cave
 				while(true)
 				{ 
@@ -172,7 +172,7 @@ public class Main
 					currentCave = parentMap.get(currentCave);
 					if(currentCave == null)
 					{
-						printCaveRouteSolution(pathToGoal.toString(), length);
+						printCaveRouteSolution(pathToGoal.toString(), distance);
 						return;
 					}
 				}
@@ -195,7 +195,6 @@ public class Main
 				{
 					openList.add(neighbour);
 				}
-				// Do not add paths that are worse than the one we already have
 				else if(neighbourScore >= gScoreMap.get(neighbour))
 				{
 					continue;

@@ -148,7 +148,7 @@ public class Main
 		// A * implementation
 		while(!openList.isEmpty())
 		{
-			// Set the current cave to the one with the smallest fn in the frontier
+			// Set the current cave to the one with the smallest fn in the open list
 			currentCave = null;
 			for(Cave cave : openList)
 			{
@@ -195,7 +195,6 @@ public class Main
 				{
 					openList.add(neighbour);
 				}
-				// Do not add paths that are worse than the one we already have
 				else if(neighbourScore >= gScoreMap.get(neighbour))
 				{
 					continue;

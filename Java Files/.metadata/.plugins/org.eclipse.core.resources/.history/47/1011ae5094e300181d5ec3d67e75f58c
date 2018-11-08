@@ -34,7 +34,7 @@ public class Main
 	{
 		FileWriter fileWriter = new FileWriter("solution_file.csn");
 		PrintWriter printWriter = new PrintWriter(fileWriter);
-		printWriter.print(path + System.getProperty("line.separator") + "Length:" + pathCost);
+		printWriter.print(path + '\n' + "Distance:" + pathCost);
 		printWriter.close();
 	}
 
@@ -135,9 +135,9 @@ public class Main
 		HashMap<Cave, Float> fScoreMap = new HashMap<Cave, Float>();
 		HashMap<Cave, Float> gScoreMap = new HashMap<Cave, Float>();
 		
-		// Path from start to goal node and length of the path
+		// Path from start to goal node
 		StringBuilder pathToGoal = new StringBuilder();
-		float length = 0.0f;
+		float distance = 0.0f;
 		
 		// Set the elements of the first node
 		openList.add(currentCave);
@@ -164,7 +164,7 @@ public class Main
 			// Check if the current cave is the last cave (goal reached)
 			if(currentCave.caveNumber == numberOfCaves-1)
 			{
-				length = fScoreMap.get(currentCave);
+				distance = fScoreMap.get(currentCave);
 				// Get the path from the current cave to the first cave
 				while(true)
 				{ 
@@ -172,7 +172,8 @@ public class Main
 					currentCave = parentMap.get(currentCave);
 					if(currentCave == null)
 					{
-						printCaveRouteSolution(pathToGoal.toString(), length);
+						pathToGoal.append(System.getProperty("line.separator"));
+						printCaveRouteSolution(pathToGoal.toString(), distance);
 						return;
 					}
 				}
@@ -195,8 +196,7 @@ public class Main
 				{
 					openList.add(neighbour);
 				}
-				// Do not add paths that are worse than the one we already have
-				else if(neighbourScore >= gScoreMap.get(neighbour))
+				else if(neighbourScore >= gScoreMap.get(currentCave))
 				{
 					continue;
 				}

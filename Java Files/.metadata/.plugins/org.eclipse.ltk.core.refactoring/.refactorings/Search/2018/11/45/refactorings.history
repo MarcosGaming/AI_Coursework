@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;distance&apos; in &apos;Main.main(...)&apos; to &apos;length&apos;&#x0D;&#x0A;- Original project: &apos;Search&apos;&#x0D;&#x0A;- Original element: &apos;Main.main(String[]).distance&apos;&#x0D;&#x0A;- Renamed element: &apos;distance&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;distance&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;{Main.java[Main~main~\[QString;@distance!4181!4202!4187!4194!F!0!false" name="length" references="true" stamp="1541709859345" version="1.0"/>
+</session>

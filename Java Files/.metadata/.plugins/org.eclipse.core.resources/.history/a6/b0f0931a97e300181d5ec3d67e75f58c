@@ -195,7 +195,6 @@ public class Main
 				{
 					openList.add(neighbour);
 				}
-				// Do not add paths that are worse than the one we already have
 				else if(neighbourScore >= gScoreMap.get(neighbour))
 				{
 					continue;
