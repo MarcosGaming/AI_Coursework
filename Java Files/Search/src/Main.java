@@ -30,11 +30,11 @@ public class Main
 	}
 	
 	// Print the file
-	public static void printCaveRouteSolution(String path, float pathCost) throws IOException 
+	public static void printCaveRouteSolution(String path,String fileName) throws IOException 
 	{
-		FileWriter fileWriter = new FileWriter("solution_file.csn");
+		FileWriter fileWriter = new FileWriter(fileName + ".csn");
 		PrintWriter printWriter = new PrintWriter(fileWriter);
-		printWriter.print(path + System.getProperty("line.separator") + "Length:" + pathCost);
+		printWriter.print(path);
 		printWriter.close();
 	}
 
@@ -42,6 +42,7 @@ public class Main
 	public static void main(String[] args) throws IOException 
 	{
 		File file = null;
+		String outputString = null;
 		// Check that the an argument is passed and that the argument is a file
 		if(args.length == 0)
 		{
@@ -50,7 +51,9 @@ public class Main
 		}
 		else
 		{
-			file = new File(args[0]);
+			outputString = args[0];
+			String fileString = outputString + ".cav";
+			file = new File(fileString);
 			if(!file.exists())
 			{
 				System.out.println("The file does not exist");
@@ -137,7 +140,6 @@ public class Main
 		
 		// Path from start to goal node and length of the path
 		StringBuilder pathToGoal = new StringBuilder();
-		float length = 0.0f;
 		
 		// Set the elements of the first node
 		openList.add(currentCave);
@@ -164,7 +166,6 @@ public class Main
 			// Check if the current cave is the last cave (goal reached)
 			if(currentCave.caveNumber == numberOfCaves-1)
 			{
-				length = fScoreMap.get(currentCave);
 				// Get the path from the current cave to the first cave
 				while(true)
 				{ 
@@ -172,7 +173,7 @@ public class Main
 					currentCave = parentMap.get(currentCave);
 					if(currentCave == null)
 					{
-						printCaveRouteSolution(pathToGoal.toString(), length);
+						printCaveRouteSolution(pathToGoal.toString(), outputString);
 						return;
 					}
 				}
@@ -206,7 +207,7 @@ public class Main
 			}
 		}
 		// Failure
-		printCaveRouteSolution(Integer.toString(0), 0.0f);
+		printCaveRouteSolution(Integer.toString(0), outputString);
 		return;
 	}
 
